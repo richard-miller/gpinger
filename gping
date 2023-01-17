@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cd /bogo/gping
+
+WEB=/var/www/html/gping/
+INCLUDE=$WEB/include.html
+TIMESTAMP=$WEB/timestamp.html
+
+source ~bogo/conda-setup.sh
+conda activate gping
+grep -v "#" ip4 > input
+python gping.py --input input --output out --shuffle False
+cat out |
+sort |
+awk -F: 'BEGIN { colour["True"]="green"; colour["False"] = "red"; } {print "<div class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "</span></div>"}' > $INCLUDE
+chmod a+r $INCLUDE
+
+(
+  echo 'Summary: ';
+  echo '<div class="indicator green"></div>' $(grep True  out | wc -l);
+  echo '<div class="indicator red"  ></div>' $(grep False out | wc -l);
+  echo '<p>';
+) > $WEB/summary.html
+
+
+date > $TIMESTAMP
