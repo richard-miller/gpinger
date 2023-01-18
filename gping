@@ -2,14 +2,16 @@
 
 cd /bogo/gping
 
-WEB=/var/www/html/gping/
+# note: ./www is sym linked to /var/www/html/gping (aka http://syswatch.science.mq.edu.au/gping/)
+
+WEB=www
 INCLUDE=$WEB/include.html
 TIMESTAMP=$WEB/timestamp.html
 
 source ~bogo/conda-setup.sh
 conda activate gping
-grep -v "#" ip4 > input
-python gping.py --input input --output out --shuffle False
+grep -v "#" ip4 |
+python gping.py --input input --output out 
 cat out |
 sort |
 awk -F: 'BEGIN { colour["True"]="green"; colour["False"] = "red"; } {print "<div class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "</span></div>"}' > $INCLUDE

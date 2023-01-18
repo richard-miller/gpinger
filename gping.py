@@ -233,29 +233,15 @@ if __name__ == '__main__':
       exit("You need to have root privileges to run this script.\nPlease try again, this time using 'sudo'. Exiting.")
 
     parser = argparse.ArgumentParser(description='GPing Scanner v0.99')
-    parser.add_argument('-i','--input', help='Input list of IPs', required=True)
-    parser.add_argument('-o','--output', help='Output', required=True)
-    parser.add_argument('-s','--shuffle', help='Shuffle', required=True)
+    parser.add_argument('-o','--output', help='Output', required=False)
     args = parser.parse_args()
-    input = args.input
     output = args.output
-    shuffle = args.shuffle
-    
-    if(shuffle == "yes"):
-      with open(input,'rU') as f:
-        lines = f.read().splitlines()
-      random.shuffle(lines)
-      data = lines
-    else:
-      with open(input,'rU') as f:
-        lines = f.read().splitlines()
-      data = lines
 
     resfile = open(output,'w')
    
     gp = GPing()
     #for domain in tqdm(data):
-    for domain in data:
+    for domain in sys.stdin.readlines():
         temp=domain.rstrip()
         hostname=temp.split(',')[0]
         #print hostname
