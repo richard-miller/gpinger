@@ -56,8 +56,8 @@ def checksum(source_string):
 
 def test_callback(ping):
     if(ping['success']):
-      #print str(ping['dest_addr'])+","+str(ping['success'])
-      resfile.write(str(ping['dest_addr'])+":"+str(ping['success'])+"\n")
+      # PING SUCCESS
+      print str(ping['dest_addr'])+","+str(ping['success'])
 
 
 class GPing:
@@ -179,11 +179,11 @@ class GPing:
         """
         while not self.die_event.is_set():
             for i in self.pings:
+                # PING FAIL
                 if self.pings[i]['sent'] and time.time() - self.pings[i]['send_time'] > self.timeout:
                     self.pings[i]['error'] = True
                     self.pings[i]['callback'](self.pings[i])
-                    #resfile.write(str(self.pings[i]['dest_addr'])+":False\n")
-                    resfile.write(str(self.pings[i]['dest_addr']) + ":False\n")
+                    print(str(self.pings[i]['dest_addr']) + ",False")
                     del(self.pings[i])
                     break
             gevent.sleep()
@@ -232,18 +232,11 @@ if __name__ == '__main__':
     if os.geteuid() != 0:
       exit("You need to have root privileges to run this script.\nPlease try again, this time using 'sudo'. Exiting.")
 
-    parser = argparse.ArgumentParser(description='GPing Scanner v0.99')
-    parser.add_argument('-o','--output', help='Output', required=False)
-    args = parser.parse_args()
-    output = args.output
-
-    resfile = open(output,'w')
-   
     gp = GPing()
     #for domain in tqdm(data):
     for domain in sys.stdin.readlines():
         temp=domain.rstrip()
         hostname=temp.split(',')[0]
-        #print hostname
+        #sys.stderr.write(hostname + "<-\n")
         gp.send(hostname,test_callback)
     gp.join()
