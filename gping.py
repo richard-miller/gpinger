@@ -57,7 +57,7 @@ def checksum(source_string):
 def test_callback(ping):
     if(ping['success']):
       # PING SUCCESS
-      print str(ping['dest_addr'])+","+str(ping['success'])
+      print str(ping['dest_addr'])+","+str(ping['success'])+","+ping['desc']
 
 
 class GPing:
@@ -118,10 +118,11 @@ class GPing:
             gevent.sleep()
 
 
-    def send(self, dest_addr, callback, psize=64):
+    def send(self, dest_addr, desc, callback, psize=64):
         """
         Send a ICMP echo request.
         :dest_addr - where to send it
+        :desc  - description
         :callback  - what to call when we get a response
         :psize     - how much data to send with it
         """
@@ -140,7 +141,7 @@ class GPing:
 
 
         # make a spot for this ping in self.pings
-        self.pings[packet_id] = {'sent':False,'success':False,'error':False,'dest_addr':dest_addr,'callback':callback}
+        self.pings[packet_id] = {'sent':False,'success':False,'error':False,'dest_addr':dest_addr,'desc':desc,'callback':callback}
 
         # Remove header size from packet size
         psize = psize - 8
@@ -183,7 +184,7 @@ class GPing:
                 if self.pings[i]['sent'] and time.time() - self.pings[i]['send_time'] > self.timeout:
                     self.pings[i]['error'] = True
                     self.pings[i]['callback'](self.pings[i])
-                    print(str(self.pings[i]['dest_addr']) + ",False")
+                    print(str(self.pings[i]['dest_addr']) + ",False," + self.pings[i]['desc'])
                     del(self.pings[i])
                     break
             gevent.sleep()
@@ -240,8 +241,8 @@ if __name__ == '__main__':
         if target[0] == '#':
           continue
 
-        hostname=target.rstrip().split(',')[0]
+        hostname, desc = target.rstrip().split(',', 1)
         #sys.stderr.write(hostname + "\n")
-        gp.send(hostname,test_callback)
+        gp.send(hostname,desc, test_callback)
 
     gp.join()

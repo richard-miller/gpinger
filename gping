@@ -10,12 +10,24 @@ TIMESTAMP=$WEB/timestamp.html
 
 source ~bogo/conda-setup.sh
 conda activate gping
-cat ip4 |		# pre-filtered
+cat ip4-name.all |			# from PowerCLI (sitea, syd01m, syd04)
+egrep -v -e "^10\.10\.100\.6" |		# firewall logs
+egrep -v -e "^10\.10\.100\.7" |		# firewall logs
+egrep -v -e "^10\.10\.100\.26" |	# firewall logs
+egrep -v -e "^10\.10\.100\.129" |	# firewall logs
+egrep -v -e "^10\.111\." |		# survivor
+egrep -v -e "^10\.123\." |		# survivor
+egrep -v -e "^10\.138\." |		# HXC
+egrep -v -e "^10\.63\." |		# SYD04 management VMs
+egrep -v -e "^169\." |			# Network appliance VMs
+egrep -v -e "^172\." |			# Private addresses
+egrep -v -e "^192\." |			# Private addresses
+egrep -v -e "^198\." |			# Network appliance VMs
 python gping.py |
-sort |
+sort -n |
 awk -F, '
   BEGIN { colour["True"]="green"; colour["False"] = "red"; } 
-        { print "<div id=\"" $1 "\" class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "<br>" "VM_name" "</span></div>"}
+        { print "<div id=\"" $1 "\" class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "<br>" $3 "</span></div>"}
 ' > $INCLUDE
 chmod a+r $INCLUDE
 
