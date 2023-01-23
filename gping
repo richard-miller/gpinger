@@ -10,18 +10,13 @@ TIMESTAMP=$WEB/timestamp.html
 
 source ~bogo/conda-setup.sh
 conda activate gping
-grep -v "#" ip4 |
+cat ip4 |		# pre-filtered
 python gping.py |
 sort |
-awk -F, 'BEGIN { colour["True"]="green"; colour["False"] = "red"; } {print "<div class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "</span></div>"}' > $INCLUDE
+awk -F, '
+  BEGIN { colour["True"]="green"; colour["False"] = "red"; } 
+        { print "<div id=\"" $1 "\" class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "<br>" "VM_name" "</span></div>"}
+' > $INCLUDE
 chmod a+r $INCLUDE
-
-(
-  echo 'Summary: ';
-  echo '<div class="indicator green"></div>' $(grep True  out | wc -l);
-  echo '<div class="indicator red"  ></div>' $(grep False out | wc -l);
-  echo '<p>';
-) > $WEB/summary.html
-
 
 date > $TIMESTAMP
