@@ -1,0 +1,132 @@
+<html>
+<head>
+<meta not-http-equiv="refresh" content="30">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+
+$(document).ready(function(){
+   $('#content').load('include.html');
+   $('#timestamp').load('timestamp.html');
+   $('#summary').load('summary.html');
+});
+
+</script>
+
+<style>
+.timestamp {
+  text-align:	center;
+}
+
+.panel {
+  background: 	#ddd;
+  padding:	5px;
+  text-align: 	left;
+}
+
+.indicator {
+  position: 	relative;
+  display: 	inline-block;
+  padding:	8px;
+  margin:	0px;
+  border:	3px solid #ddd;
+}
+
+.indicator.blue   { background: blue; }
+.indicator.green  { background: green; }
+.indicator.red    { background: red; }
+
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #999;
+  color: #fff;
+  text-align: 	right; 
+  padding: 15px;
+  border-radius: 6px;
+ 
+  position: absolute;
+  z-index: 1;
+}
+
+.indicator:hover .tooltiptext {
+  visibility: visible;
+}
+
+body	{
+  margin: 100px;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h2>gping</h2>
+
+
+<div class="panel"> 
+  <div id="content">content</div>
+</div>
+
+
+<p>
+Last Updated: <span id="timestamp">timestamp</span>
+
+<p>
+<button onclick='$(".green").hide();'>Hide Green</button>
+<button onclick='$(".green").show();'>Show Green</button>
+<button onclick='$(".red").hide();'>Hide Red</button>
+<button onclick='$(".red").show();'>Show Red</button>
+
+<p>
+Highlight RegEx: <input id="patternSelect" type="text" value="10\.120\.">
+<button onclick='colourSelect("yellow")'>Yellow</button>
+<button onclick='colourSelect("cyan")'>Cyan</button>
+<button onclick='colourSelect("orange")'>Orange</button>
+<button onclick='colourSelect("purple")'>Purple</button>
+<button onclick='colourSelect"("#ddd")'>Default</button>
+
+<p>
+Hide/Show RegEx: <input id="hideShow" type="text" value="sitea">
+<button onclick='regExHide()'>Hide</button>
+<button onclick='regExShow()'>Show</button>
+<button onclick='hideAll()'>Hide All</button>
+<button onclick='showAll();'>Show All</button>
+
+<script>
+
+function colourSelect(colour) {
+  reg = document.getElementById("patternSelect").value;
+  $('[class*="indicator"]').filter( function() {
+     return this.innerHTML.match(new RegExp(reg, 'i'))
+  }).css("border", "3px solid " + colour);
+}
+
+function showAll() {
+  $('[class*="indicator"]').show();
+}
+
+function hideAll() {
+  $('[class*="indicator"]').hide();
+}
+
+function regExHide() {
+  reg = document.getElementById("hideShow").value;
+  $('[class*="indicator"]').filter( function() {
+     return this.innerHTML.match(new RegExp(reg, 'i'))
+  }).hide();
+}
+function regExShow() {
+  reg = document.getElementById("hideShow").value;
+  $('[class*="indicator"]').filter( function() {
+     return this.innerHTML.match(new RegExp(reg, 'i'))
+  }).show();
+}
+
+</script>
+
+</body>
+</html>
