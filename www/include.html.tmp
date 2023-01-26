@@ -896,7 +896,7 @@
 <div id="137.111.180.28,amq-dot28svn,sitea" class="indicator red"><span class="tooltiptext">137.111.180.28<br>amq-dot28svn<br>sitea</span></div>
 <div id="137.111.180.29,amq-dot29dev,sitea" class="indicator red"><span class="tooltiptext">137.111.180.29<br>amq-dot29dev<br>sitea</span></div>
 <div id="137.111.180.31,amq-dot31ceh,sitea" class="indicator green"><span class="tooltiptext">137.111.180.31<br>amq-dot31ceh<br>sitea</span></div>
-<div id="137.111.180.37,amqws37,sitea" class="indicator green"><span class="tooltiptext">137.111.180.37<br>amqws37<br>sitea</span></div>
+<div id="137.111.180.37,amqws37,sitea" class="indicator red"><span class="tooltiptext">137.111.180.37<br>amqws37<br>sitea</span></div>
 <div id="137.111.180.7,amqws11,sitea" class="indicator red"><span class="tooltiptext">137.111.180.7<br>amqws11<br>sitea</span></div>
 <div id="137.111.226.22,dcproxyprod04,syd01" class="indicator green"><span class="tooltiptext">137.111.226.22<br>dcproxyprod04<br>syd01</span></div>
 <div id="137.111.226.234,eduroam-gw-prod,sitea" class="indicator green"><span class="tooltiptext">137.111.226.234<br>eduroam-gw-prod<br>sitea</span></div>
