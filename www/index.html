@@ -7,18 +7,21 @@
 <script language="JavaScript" type="text/javascript">
 
 $(document).ready(function(){
-   $('#content').load('include.html');
-   $('#timestamp').load('timestamp.html');
-   $('#summary').load('summary.html');
+  $('#content').load('include.html');
+  $('#timestamp').load('timestamp.html');
+  $('#summary').load('summary.html');
+  setTimeout(function() {
+    $("#content > .indicator").filter(".grey").hide();
+    $("#legendGreen").text("Success - " + $("#content > .indicator").filter(".green").length);
+    $("#legendRed").text("Failed - " + $("#content > .indicator").filter(".red").length);
+    $("#legendGrey").text("Skipped - " + $("#content > .indicator").filter(".grey").length);
+    $("#legendAll").text("All - " + $("#content > .indicator").length);
+  }, 200);
 });
 
 </script>
 
 <style>
-.timestamp {
-  text-align:	center;
-}
-
 .panel {
   background: 	#ddd;
   padding:	5px;
@@ -38,7 +41,6 @@ $(document).ready(function(){
 .indicator.red    { background: red; }
 
 .whiteText   { color: white; }
-
 
 .tooltiptext {
   visibility: hidden;
@@ -62,26 +64,30 @@ body	{
 }
 </style>
 
-
 </head>
 
 <body>
 
 <h2>gping</h2>
 
-<div class="indicator green whiteText">Success</div>
+<div id="legendGreen" class="indicator green whiteText">Success</div>
 <button onclick='$("#content > .indicator").filter(".green").hide();'>Hide</button>
 <button onclick='$("#content > .indicator").filter(".green").show();'>Show</button>
 &nbsp
 &nbsp
-<div class="indicator red whiteText">Failed</div>
+<div id="legendRed" class="indicator red whiteText">Failed</div>
 <button onclick='$("#content > .indicator").filter(".red").hide();'>Hide</button>
 <button onclick='$("#content > .indicator").filter(".red").show();'>Show</button>
 &nbsp
 &nbsp
-<div class="indicator grey whiteText">Skipped</div>
+<div id="legendGrey" class="indicator grey whiteText">Skipped</div>
 <button onclick='$("#content > .indicator").filter(".grey").hide();'>Hide</button>
 <button onclick='$("#content > .indicator").filter(".grey").show();'>Show</button>
+&nbsp
+&nbsp
+<div id="legendAll" class="indicator" style="background-color:#ddd">All</div>
+<button onclick='$("#content > .indicator").hide();'>Hide</button>
+<button onclick='$("#content > .indicator").show();'>Show</button>
 
 <p>
 
@@ -90,7 +96,7 @@ body	{
 </div>
 
 
-<p>
+<p align="left">
 Last Updated: <span id="timestamp">timestamp</span>
 
 <p>
@@ -107,8 +113,6 @@ Highlight RegEx: <input id="patternSelect" type="text" value="10\.120\.">
 Hide/Show RegEx: <input id="hideShow" type="text" value="sitea">
 <button onclick='regExHide()'>Hide</button>
 <button onclick='regExShow()'>Show</button>
-<button onclick='$("#content > .indicator").hide();'>Hide All</button>
-<button onclick='$("#content > .indicator").show();'>Show All</button>
 
 <script>
 
