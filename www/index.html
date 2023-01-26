@@ -33,9 +33,12 @@ $(document).ready(function(){
   border:	3px solid #ddd;
 }
 
-.indicator.blue   { background: blue; }
+.indicator.grey   { background: grey; }
 .indicator.green  { background: green; }
 .indicator.red    { background: red; }
+
+.whiteText   { color: white; }
+
 
 .tooltiptext {
   visibility: hidden;
@@ -66,6 +69,21 @@ body	{
 
 <h2>gping</h2>
 
+<div class="indicator green whiteText">Success</div>
+<button onclick='$("#content > .indicator").filter(".green").hide();'>Hide</button>
+<button onclick='$("#content > .indicator").filter(".green").show();'>Show</button>
+&nbsp
+&nbsp
+<div class="indicator red whiteText">Failed</div>
+<button onclick='$("#content > .indicator").filter(".red").hide();'>Hide</button>
+<button onclick='$("#content > .indicator").filter(".red").show();'>Show</button>
+&nbsp
+&nbsp
+<div class="indicator grey whiteText">Skipped</div>
+<button onclick='$("#content > .indicator").filter(".grey").hide();'>Hide</button>
+<button onclick='$("#content > .indicator").filter(".grey").show();'>Show</button>
+
+<p>
 
 <div class="panel"> 
   <div id="content">content</div>
@@ -76,10 +94,6 @@ body	{
 Last Updated: <span id="timestamp">timestamp</span>
 
 <p>
-<button onclick='$(".green").hide();'>Hide Green</button>
-<button onclick='$(".green").show();'>Show Green</button>
-<button onclick='$(".red").hide();'>Hide Red</button>
-<button onclick='$(".red").show();'>Show Red</button>
 
 <p>
 Highlight RegEx: <input id="patternSelect" type="text" value="10\.120\.">
@@ -87,14 +101,14 @@ Highlight RegEx: <input id="patternSelect" type="text" value="10\.120\.">
 <button onclick='colourSelect("cyan")'>Cyan</button>
 <button onclick='colourSelect("orange")'>Orange</button>
 <button onclick='colourSelect("purple")'>Purple</button>
-<button onclick='colourSelect"("#ddd")'>Default</button>
+<button onclick='document.getElementById("patternSelect").value = ""; colourSelect("#ddd")'>Clear</button>
 
 <p>
 Hide/Show RegEx: <input id="hideShow" type="text" value="sitea">
 <button onclick='regExHide()'>Hide</button>
 <button onclick='regExShow()'>Show</button>
-<button onclick='hideAll()'>Hide All</button>
-<button onclick='showAll();'>Show All</button>
+<button onclick='$("#content > .indicator").hide();'>Hide All</button>
+<button onclick='$("#content > .indicator").show();'>Show All</button>
 
 <script>
 
@@ -103,14 +117,6 @@ function colourSelect(colour) {
   $('[class*="indicator"]').filter( function() {
      return this.innerHTML.match(new RegExp(reg, 'i'))
   }).css("border", "3px solid " + colour);
-}
-
-function showAll() {
-  $('[class*="indicator"]').show();
-}
-
-function hideAll() {
-  $('[class*="indicator"]').hide();
 }
 
 function regExHide() {

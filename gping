@@ -11,49 +11,34 @@ TIMESTAMP=$WEB/timestamp.html
 source ~bogo/conda-setup.sh
 conda activate gping
 cat vmware-addresses |			# from PowerCLI (sitea, syd01m, syd04)
-egrep -v -e "^10\.10\.100\.6" |		# firewall logs
-egrep -v -e "^10\.10\.100\.7" |
-egrep -v -e "^10\.10\.100\.26" |
-egrep -v -e "^10\.10\.100\.129" |
-egrep -v -e "^10\.111\." |		# survivor
-egrep -v -e "^10\.123\." |		# survivor
-egrep -v -e "^10\.138\." |		# HXC
-egrep -v -e "^10\.63\." |		# SYD04 management VMs
-egrep -v -e "^169\." |			# Network appliance VMs
-egrep -v -e "^172\." |			# Private addresses
-egrep -v -e "^192\." |			# Private addresses
-egrep -v -e "^198\." |			# Network appliance VMs
-egrep -v -e "MQU-MODE2" |		# SYD01 NSX appliances
-egrep -v -e "MQUSYD01-DLR" |		# SYD01 NSX appliances
-egrep -v -e "pbxvscm1001a" |            # PABX Appliances - never pingable ...
-egrep -v -e "pbxvsamstr1001a" |
-egrep -v -e "pbxvsutil1001a" |
-egrep -v -e "pbxascms1001a" |
-egrep -v -e "pbxvsamapp1002a" |
-egrep -v -e "pbxasaes1001a" |
-egrep -v -e "pbxvscm1002a" |
-egrep -v -e "pbxvsrmsbc1001a" |
-egrep -v -e "pbxvsesmgr1001a" |
-egrep -v -e "pbxvssmgr1001a" |
-egrep -v -e "pbxvsaams1001b" |
-egrep -v -e "pbxvscmess1001b" |
-egrep -v -e "pbxvsdiag1001b" |
-egrep -v -e "pbxvsesmgr1001b" |
-egrep -v -e "pbxvsutil1001b" |
-egrep -v -e "pbxvsrmsbc1001a" |
-egrep -v -e "pbxvsrmsbc1001a" |
-egrep -v -e "pbxvsaams1001a" |
-egrep -v -e "pbxvssbcm1001a" |
-egrep -v -e "xmc-nac" |			# Extreme Networks applicances
-egrep -v -e "xmc-purview" |
-egrep -v -e "dcaasprd2002a" |		# Snowflake
-egrep -v -e "dcaasuat2002" |
+sed '
+  /^10\.10\.100\.6/	s/^/-/		# firewall logs
+  /^10\.10\.100\.7/	s/^/-/
+  /^10\.10\.100\.26/	s/^/-/
+  /^10\.10\.100\.129/	s/^/-/
+  /^10\.111\./		s/^/-/		# survivor
+  /^10\.123\./		s/^/-/		# survivor
+  /^10\.138\./		s/^/-/		# HXC
+  /^10\.63\./		s/^/-/		# SYD04 management VMs
+  /^169\./		s/^/-/		# Network appliance VMs
+  /^172\./		s/^/-/		# Private addresses
+  /^192\./		s/^/-/		# Private addresses
+  /^198\./		s/^/-/		# Network appliance VMs
+  /pbx/ 		s/^/-/		# PABX Appliances - never pingable ...
+  /MQU-MODE2/ 		s/^/-/		# SYD01 NSX appliances
+  /MQUSYD01-DLR/        s/^/-/		# SYD01 NSX appliances
+  /mc-nac/		s/^/-/		# Extreme Networks applicances
+  /xmc-purview/		s/^/-/
+  /dcaasprd2002a/	s/^/-/		# Snowflake
+  /dcaasuat2002/	s/^/-/
+' |
 python gping.py |
 sort -n |
 awk -F, '
-  BEGIN { colour["True"]="green"; colour["False"] = "red"; } 
+  BEGIN { colour["True"]="green"; colour["False"] = "red"; colour["Skipped"] = "grey" } 
         { print "<div id=\"" $1 "," $3 "," $4 "\" class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "<br>" $3 "<br>" $4"</span></div>"}
-' > $INCLUDE
-chmod a+r $INCLUDE
+' > $INCLUDE.tmp
+chmod a+r $INCLUDE.tmp
+mv $INCLUDE.tmp
 
 date > $TIMESTAMP
