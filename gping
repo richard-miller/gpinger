@@ -1,8 +1,16 @@
 #!/bin/bash
 
+# Version: 1.0.0
+
 cd /bogo/gping
 
 # note: ./www is sym linked to /var/www/html/gping (aka http://syswatch.science.mq.edu.au/gping/)
+#
+# executed regularly from root crontab (note required to send ICMP)
+#
+#  * * * * *               /bogo/gping/gping > /dev/null 2>&1
+#  * * * * *               sleep 30; /bogo/gping/gping > /dev/null 2>&1
+#
 
 WEB=www
 INCLUDE=$WEB/include.html
@@ -31,10 +39,13 @@ sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /xmc-purview/		s/^/-/; t;
   /dcaasprd2002a/	s/^/-/; t;	# Snowflake
   /dcaasuat2002/	s/^/-/; t;
-  /MSLWXV002-FOA1806VW1/	s/^/+/; t;
-  /spamgtprd001/		s/^/+/; t;
-  /dbmgtprd100/			s/^/+/; t;
-  /adsdctst2011a/		s/^/+/; t;
+  /MSLWXV002-FOA1806VW1/	s/^/+/; t;	# FAULT
+  /spamgtprd001/		s/^/+/; t;	# FAULT
+  /dbmgtprd100/			s/^/+/; t;	# FAULT
+  /adsdctst2011a/		s/^/+/; t;	# FAULT
+  /gahwsuat2001/		s/^/+/; t;	# FAULT
+  /gahwsdev2001/		s/^/+/; t;	# FAULT
+  /gahasprd2001/		s/^/+/; t;	# FAULT
 ' |
 python gping.py |
 sort -n |
