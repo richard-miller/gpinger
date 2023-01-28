@@ -8,13 +8,14 @@
 
 $(document).ready(function(){
   $('#content').load('include.html');
-  $('#timestamp').load('timestamp.html');
-  $('#summary').load('summary.html');
+  $('#timestamp').text("Last Update: " + fetchHeader("include.html", "Last-Modified"));
   setTimeout(function() {
     $("#content > .indicator").filter(".grey").hide();
+    $("#content > .indicator").filter(".pink").hide();
     $("#legendGreen").text("Success - " + $("#content > .indicator").filter(".green").length);
     $("#legendRed").text("Failed - " + $("#content > .indicator").filter(".red").length);
     $("#legendGrey").text("Skipped - " + $("#content > .indicator").filter(".grey").length);
+    $("#legendPink").text("Skipped - " + $("#content > .indicator").filter(".pink").length);
     $("#legendAll").text("All - " + $("#content > .indicator").length);
   }, 200);
 });
@@ -36,6 +37,7 @@ $(document).ready(function(){
   border:	3px solid #ddd;
 }
 
+.indicator.pink   { background: pink; }
 .indicator.grey   { background: grey; }
 .indicator.green  { background: green; }
 .indicator.red    { background: red; }
@@ -85,6 +87,11 @@ body	{
 <button onclick='$("#content > .indicator").filter(".grey").show();'>Show</button>
 &nbsp
 &nbsp
+<div id="legendPink" class="indicator pink whiteText">Fault</div>
+<button onclick='$("#content > .indicator").filter(".pink").hide();'>Hide</button>
+<button onclick='$("#content > .indicator").filter(".pink").show();'>Show</button>
+&nbsp
+&nbsp
 <div id="legendAll" class="indicator" style="background-color:#ddd">All</div>
 <button onclick='$("#content > .indicator").hide();'>Hide</button>
 <button onclick='$("#content > .indicator").show();'>Show</button>
@@ -97,8 +104,7 @@ body	{
 
 
 <p style="margin-bottom:1cm;">
-Last Updated: <span id="timestamp">timestamp</span>
-</p>
+<span id="timestamp">timestamp</span>
 
 <p>
 
@@ -116,6 +122,19 @@ Hide/Show RegEx: <input id="hideShow" type="text" value="sitea">
 <button onclick='regExShow()'>Show</button>
 
 <script>
+function fetchHeader(url, wch) {
+    try {
+        var req=new XMLHttpRequest();
+        req.open("HEAD", url, false);
+        req.send(null);
+        if(req.status== 200){
+            return Date(req.getResponseHeader(wch));
+        }
+        else return false;
+    } catch(er) {
+        return er.message;
+    }
+}
 
 function colourSelect(colour) {
   reg = document.getElementById("patternSelect").value;
@@ -130,6 +149,7 @@ function regExHide() {
      return this.innerHTML.match(new RegExp(reg, 'i'))
   }).hide();
 }
+
 function regExShow() {
   reg = document.getElementById("hideShow").value;
   $('[class*="indicator"]').filter( function() {

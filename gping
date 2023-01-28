@@ -11,34 +11,41 @@ TIMESTAMP=$WEB/timestamp.html
 source ~bogo/conda-setup.sh
 conda activate gping
 cat vmware-addresses |			# from PowerCLI (sitea, syd01m, syd04)
-sed '
-  /^10\.10\.100\.6/	s/^/-/		# firewall logs
-  /^10\.10\.100\.7/	s/^/-/
-  /^10\.10\.100\.26/	s/^/-/
-  /^10\.10\.100\.129/	s/^/-/
-  /^10\.111\./		s/^/-/		# survivor
-  /^10\.123\./		s/^/-/		# survivor
-  /^10\.138\./		s/^/-/		# HXC
-  /^10\.63\./		s/^/-/		# SYD04 management VMs
-  /^169\./		s/^/-/		# Network appliance VMs
-  /^172\./		s/^/-/		# Private addresses
-  /^192\./		s/^/-/		# Private addresses
-  /^198\./		s/^/-/		# Network appliance VMs
-  /pbx/ 		s/^/-/		# PABX Appliances - never pingable ...
-  /MQU-MODE2/ 		s/^/-/		# SYD01 NSX appliances
-  /MQUSYD01-DLR/        s/^/-/		# SYD01 NSX appliances
-  /mc-nac/		s/^/-/		# Extreme Networks applicances
-  /xmc-purview/		s/^/-/
-  /dcaasprd2002a/	s/^/-/		# Snowflake
-  /dcaasuat2002/	s/^/-/
+sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
+  /^10\.10\.100\.6/	s/^/-/; t;	# firewall logs
+  /^10\.10\.100\.7/	s/^/-/; t;
+  /^10\.10\.100\.26/	s/^/-/; t;
+  /^10\.10\.100\.129/	s/^/-/; t;
+  /^10\.111\./		s/^/-/; t;	# survivor
+  /^10\.123\./		s/^/-/; t;	# survivor
+  /^10\.138\./		s/^/-/; t;	# HXC
+  /^10\.63\./		s/^/-/; t;	# SYD04 management VMs
+  /^169\./		s/^/-/; t;	# Network appliance VMs
+  /^172\./		s/^/-/; t; 	# Private addresses
+  /^192\./		s/^/-/; t; 	# Private addresses
+  /^198\./		s/^/-/; t; 	# Network appliance VMs
+  /pbx/ 		s/^/-/;	t;	# PABX Appliances - never pingable ...
+  /MQU-MODE2/ 		s/^/-/;	t;	# SYD01 NSX appliances
+  /MQUSYD01-DLR/        s/^/-/;	t;	# SYD01 NSX appliances
+  /mc-nac/		s/^/-/;	t;	# Extreme Networks applicances
+  /xmc-purview/		s/^/-/; t;
+  /dcaasprd2002a/	s/^/-/; t;	# Snowflake
+  /dcaasuat2002/	s/^/-/; t;
+  /MSLWXV002-FOA1806VW1/	s/^/+/; t;
+  /spamgtprd001/		s/^/+/; t;
+  /dbmgtprd100/			s/^/+/; t;
+  /adsdctst2011a/		s/^/+/; t;
 ' |
 python gping.py |
 sort -n |
 awk -F, '
-  BEGIN { colour["True"]="green"; colour["False"] = "red"; colour["Skipped"] = "grey" } 
+  BEGIN {
+          colour["True"]="green"; 
+          colour["False"] = "red";
+          colour["Skipped"] = "grey";
+          colour["Fault"] = "pink";
+        } 
         { print "<div id=\"" $1 "," $3 "," $4 "\" class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "<br>" $3 "<br>" $4"</span></div>"}
 ' > $INCLUDE.tmp
 chmod a+r $INCLUDE.tmp
-mv $INCLUDE.tmp
-
-date > $TIMESTAMP
+mv $INCLUDE.tmp $INCLUDE
