@@ -1,6 +1,7 @@
 <html>
 <head>
 <meta not-http-equiv="refresh" content="30">
+<meta http-equiv="cache-control" content="no-cache">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
@@ -8,7 +9,7 @@
 
 $(document).ready(function(){
   $('#content').load('include.html');
-  $('#timestamp').text("Last Update: " + fetchHeader("include.html", "Last-Modified"));
+  $('#timestamp').html( fetchHeader("index.html", "Last-Modified") );
   setTimeout(function() {
     $("#content > .indicator").filter(".grey").hide();
     $("#content > .indicator").filter(".pink").hide();
@@ -125,13 +126,14 @@ Hide/Show RegEx: <input id="hideShow" type="text" value="sitea">
 Server side filtering (grey/pink), see:  syswatch.science.mq.edu.au:~bogo/gping/gping
 
 <script>
-function fetchHeader(url, wch) {
+function fetchHeader(url, header) {
     try {
         var req=new XMLHttpRequest();
         req.open("HEAD", url, false);
         req.send(null);
         if(req.status== 200){
-            return Date(req.getResponseHeader(wch));
+            var date = new Date(req.getResponseHeader(header));
+            return date.toString();
         }
         else return false;
     } catch(er) {

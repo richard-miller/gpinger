@@ -14,7 +14,7 @@ cd /bogo/gping
 
 WEB=www
 INCLUDE=$WEB/include.html
-TIMESTAMP=$WEB/timestamp.html
+INDEX=$WEB/index.html
 
 source ~bogo/conda-setup.sh
 conda activate gping
@@ -42,7 +42,6 @@ sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /MSLWXV002-FOA1806VW1/	s/^/+/; t;	# FAULT
   /spamgtprd001/		s/^/+/; t;	# FAULT
   /dbmgtprd100/			s/^/+/; t;	# FAULT
-  /adsdctst2011a/		s/^/+/; t;	# FAULT
   /gahwsuat2001/		s/^/+/; t;	# FAULT
   /gahwsdev2001/		s/^/+/; t;	# FAULT
   /gahasprd2001/		s/^/+/; t;	# FAULT
@@ -60,3 +59,4 @@ awk -F, '
 ' > $INCLUDE.tmp
 chmod a+r $INCLUDE.tmp
 mv $INCLUDE.tmp $INCLUDE
+touch $INDEX			# make client think there has been a refresh ...
