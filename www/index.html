@@ -15,7 +15,7 @@ $(document).ready(function(){
     $("#legendGreen").text("Success - " + $("#content > .indicator").filter(".green").length);
     $("#legendRed").text("Failed - " + $("#content > .indicator").filter(".red").length);
     $("#legendGrey").text("Skipped - " + $("#content > .indicator").filter(".grey").length);
-    $("#legendPink").text("Skipped - " + $("#content > .indicator").filter(".pink").length);
+    $("#legendPink").text("Fault - " + $("#content > .indicator").filter(".pink").length);
     $("#legendAll").text("All - " + $("#content > .indicator").length);
   }, 200);
 });
