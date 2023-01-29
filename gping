@@ -1,12 +1,21 @@
 #!/bin/bash
+#
+#  async ping of a list of IP and produce a status HTML page
+#
+# RJM - Sun 29 Jan 10:41:12 AEDT 2023
 
 # Version: 1.0.0
+
+# requires:
+#
+#   python 2.7+ 
+#   package: gevent
 
 cd /bogo/gping
 
 # note: ./www is sym linked to /var/www/html/gping (aka http://syswatch.science.mq.edu.au/gping/)
 #
-# executed regularly from root crontab (note required to send ICMP)
+# executed regularly from root crontab (note 'root' required for ICMP send permissions)
 #
 #  * * * * *               /bogo/gping/gping > /dev/null 2>&1
 #  * * * * *               sleep 30; /bogo/gping/gping > /dev/null 2>&1
@@ -20,25 +29,25 @@ source ~bogo/conda-setup.sh
 conda activate gping
 cat vmware-addresses |			# from PowerCLI (sitea, syd01m, syd04)
 sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
-  /^10\.10\.100\.6/	s/^/-/; t;	# firewall logs
-  /^10\.10\.100\.7/	s/^/-/; t;
-  /^10\.10\.100\.26/	s/^/-/; t;
-  /^10\.10\.100\.129/	s/^/-/; t;
-  /^10\.111\./		s/^/-/; t;	# survivor
-  /^10\.123\./		s/^/-/; t;	# survivor
-  /^10\.138\./		s/^/-/; t;	# HXC
-  /^10\.63\./		s/^/-/; t;	# SYD04 management VMs
-  /^169\./		s/^/-/; t;	# Network appliance VMs
-  /^172\./		s/^/-/; t; 	# Private addresses
-  /^192\./		s/^/-/; t; 	# Private addresses
-  /^198\./		s/^/-/; t; 	# Network appliance VMs
-  /pbx/ 		s/^/-/;	t;	# PABX Appliances - never pingable ...
-  /MQU-MODE2/ 		s/^/-/;	t;	# SYD01 NSX appliances
-  /MQUSYD01-DLR/        s/^/-/;	t;	# SYD01 NSX appliances
-  /mc-nac/		s/^/-/;	t;	# Extreme Networks applicances
-  /xmc-purview/		s/^/-/; t;
-  /dcaasprd2002a/	s/^/-/; t;	# Snowflake
-  /dcaasuat2002/	s/^/-/; t;
+  /^10\.10\.100\.6/		s/^/-/; t;	# firewall logs
+  /^10\.10\.100\.7/		s/^/-/; t;	# firewall logs
+  /^10\.10\.100\.26/		s/^/-/; t;	# firewall logs
+  /^10\.10\.100\.129/		s/^/-/; t;	# firewall logs
+  /^10\.111\./			s/^/-/; t;	# survivor
+  /^10\.123\./			s/^/-/; t;	# survivor
+  /^10\.138\./			s/^/-/; t;	# SYD01 management VMs
+  /^10\.63\./			s/^/-/; t;	# SYD04 management VMs
+  /^169\./			s/^/-/; t;	# Network appliance VMs
+  /^172\./			s/^/-/; t; 	# Private addresses
+  /^192\./			s/^/-/; t; 	# Private addresses
+  /^198\./			s/^/-/; t; 	# Network appliance VMs
+  /pbx/ 			s/^/-/;	t;	# PABX Appliances - never pingable ...
+  /MQU-MODE2/ 			s/^/-/;	t;	# SYD01 NSX appliances
+  /MQUSYD01-DLR/       		s/^/-/;	t;	# SYD01 NSX appliances
+  /xmc-nac/			s/^/-/;	t;	# Extreme Networks applicances
+  /xmc-purview/			s/^/-/; t;
+  /dcaasprd2002a/		s/^/-/; t;	# Snowflake
+  /dcaasuat2002/		s/^/-/; t;
   /MSLWXV002-FOA1806VW1/	s/^/+/; t;	# FAULT
   /spamgtprd001/		s/^/+/; t;	# FAULT
   /dbmgtprd100/			s/^/+/; t;	# FAULT
@@ -55,8 +64,13 @@ awk -F, '
           colour["Skipped"] = "grey";
           colour["Fault"] = "pink";
         } 
-        { print "<div id=\"" $1 "," $3 "," $4 "\" class=\"indicator " colour[$2] "\"><span class=\"tooltiptext\">" $1 "<br>" $3 "<br>" $4"</span></div>"}
-' > $INCLUDE.tmp
-chmod a+r $INCLUDE.tmp
-mv $INCLUDE.tmp $INCLUDE
-touch $INDEX			# make client think there has been a refresh ...
+        { 
+          print "<div id=\"" $1  "\" " \
+                "class=\"indicator " colour[$2] "\">" \
+                "<span class=\"tooltiptext\">" $1 "<br>" $3 "<br>" $4"</span>" \
+                "</div>"
+        }
+' > $INCLUDE.$$
+chmod a+r $INCLUDE.$$
+mv $INCLUDE.$$ $INCLUDE
+touch $INDEX			# make client browser think there has been a refresh ...
