@@ -44,6 +44,7 @@ sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /pbx/ 			s/^/-/;	t;	# PABX Appliances - never pingable ...
   /MQU-MODE2/ 			s/^/-/;	t;	# SYD01 NSX appliances
   /MQUSYD01-DLR/       		s/^/-/;	t;	# SYD01 NSX appliances
+  /^TWM02/       		s/^/-/;	t;	# IaaS test machines
   /xmc-nac/			s/^/-/;	t;	# Extreme Networks applicances
   /xmc-purview/			s/^/-/; t;
   /dcaasprd2002a/		s/^/-/; t;	# Snowflake
