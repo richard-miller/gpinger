@@ -28,7 +28,7 @@ INDEX=$WEB/index.html
 source ~bogo/conda-setup.sh
 conda activate gping
 cat vmware-addresses |			# from PowerCLI (sitea, syd01m, syd04)
-sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
+sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /^10\.10\.100\.6/		s/^/-/; t;	# firewall logs
   /^10\.10\.100\.7/		s/^/-/; t;	# firewall logs
   /^10\.10\.100\.26/		s/^/-/; t;	# firewall logs
@@ -44,7 +44,11 @@ sed '					# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /pbx/ 			s/^/-/;	t;	# PABX Appliances - never pingable ...
   /MQU-MODE2/ 			s/^/-/;	t;	# SYD01 NSX appliances
   /MQUSYD01-DLR/       		s/^/-/;	t;	# SYD01 NSX appliances
-  /^TWM02/       		s/^/-/;	t;	# IaaS test machines
+  /abedtest/      		s/^/-/;	t;	# Abed test machines
+  /tlm/       			s/^/-/;	t;	# IaaS test machines
+  /twm/       			s/^/-/;	t;	# IaaS test machines
+  /TLM/       			s/^/-/;	t;	# IaaS test machines
+  /TWM/       			s/^/-/;	t;	# IaaS test machines
   /xmc-nac/			s/^/-/;	t;	# Extreme Networks applicances
   /xmc-purview/			s/^/-/; t;
   /dcaasprd2002a/		s/^/-/; t;	# Snowflake
