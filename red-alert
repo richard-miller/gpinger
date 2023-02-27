@@ -31,7 +31,7 @@ if [ "$STATUS" == "GREEN" ]; then
 
   if [ -f ${ALERT} ]; then
     #echo no longer any ALERT
-    echo ${CURL} \
+    ${CURL} \
       -silent \
       -X POST \
       -H "Content-Type:application/json"  \
