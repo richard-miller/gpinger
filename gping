@@ -53,6 +53,8 @@ sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /xmc-purview/			s/^/-/; t;
   /dcaasprd2002a/		s/^/-/; t;	# Snowflake
   /dcaasuat2002/		s/^/-/; t;
+  /t1csynprd1002a/		s/^/-/; t;	# MUH 
+  /t1csynuat1002a/		s/^/-/; t;	# MUH 
   /MSLWXV002-FOA1806VW1/	s/^/+/; t;	# FAULT
   /spamgtprd001/		s/^/+/; t;	# FAULT
   /dbmgtprd100/			s/^/+/; t;	# FAULT

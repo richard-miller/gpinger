@@ -27,10 +27,12 @@ if grep -q "indicator ${colour}" www/include.html; then
 fi
  
 
+
 if [ "$STATUS" == "GREEN" ]; then
 
   if [ -f ${ALERT} ]; then
-    #echo no longer any ALERT
+    echo no longer any ALERT
+    exit
     echo ${CURL} \
       -silent \
       -X POST \

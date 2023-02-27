@@ -66,7 +66,7 @@ class GPing:
     Then call its send method to send pings. Callbacks will be sent ping
     details
     """
-    def __init__(self,timeout=4,max_outstanding=5000):
+    def __init__(self,timeout=6,max_outstanding=5000):
         """
         :timeout            - amount of time a ICMP echo request can be outstanding
         :max_outstanding    - maximum number of outstanding ICMP echo requests without responses (limits traffic)
