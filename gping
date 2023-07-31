@@ -27,8 +27,14 @@ INDEX=$WEB/index.html
 
 source ~bogo/conda-setup.sh
 conda activate gping
-cat vmware-addresses |			# from PowerCLI (sitea, syd01m, syd04)
-sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink)
+cat vmware-addresses |			        # from PowerCLI (sitea, syd01, syd04, vmc)`
+sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink), '!' non-pingable (blue)
+  /^10\.20\.248\./		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
+  /^10\.20\.250\./		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
+  /^10\.42\.0\.0/		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
+  /^10\.42\.0\.1/		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
+  /^10\.26\.4\.33/		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
+  /^10\.10\.100\.6/		s/^/-/; t;	# firewall logs
   /^10\.10\.100\.6/		s/^/-/; t;	# firewall logs
   /^10\.10\.100\.7/		s/^/-/; t;	# firewall logs
   /^10\.10\.100\.26/		s/^/-/; t;	# firewall logs
@@ -62,14 +68,17 @@ sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink)
   /gahwsdev2001/		s/^/+/; t;	# FAULT
   /gahasprd2001/		s/^/+/; t;	# FAULT
 ' |
+sed 's/.mqauth.uni.mq.edu.au//' |
+sed 's/vcenter.sddc-54-253-2-26.vmwarevmc.com/vmc - sddc1/' |
 python gping.py |
 sort -n |
 awk -F, '
   BEGIN {
-          colour["True"]="green"; 
+          colour["True"] = "green"; 
           colour["False"] = "red";
           colour["Skipped"] = "grey";
           colour["Fault"] = "pink";
+          colour["Kyndryl"] = "lightblue";
         } 
         { 
           print "<div id=\"" $1  "\" " \

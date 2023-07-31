@@ -11,12 +11,14 @@ $(document).ready(function(){
   $('#content').load('include.html');
   $('#timestamp').html( fetchHeader("index.html", "Last-Modified") );
   setTimeout(function() {
+    $("#content > .indicator").filter(".lightblue").hide();
     $("#content > .indicator").filter(".grey").hide();
     $("#content > .indicator").filter(".pink").hide();
     $("#legendGreen").text("Success - " + $("#content > .indicator").filter(".green").length);
     $("#legendRed").text("Failed - " + $("#content > .indicator").filter(".red").length);
     $("#legendGrey").text("Skipped - " + $("#content > .indicator").filter(".grey").length);
     $("#legendPink").text("Fault - " + $("#content > .indicator").filter(".pink").length);
+    $("#legendBlue").text("Kyndryl - " + $("#content > .indicator").filter(".lightblue").length);
     $("#legendAll").text("All - " + $("#content > .indicator").length);
   }, 200);
 });
@@ -38,10 +40,11 @@ $(document).ready(function(){
   border:	3px solid #ddd;
 }
 
-.indicator.pink   { background: pink; }
-.indicator.grey   { background: grey; }
-.indicator.green  { background: green; }
-.indicator.red    { background: red; }
+.indicator.pink   	{ background: pink; }
+.indicator.grey   	{ background: grey; }
+.indicator.green  	{ background: green; }
+.indicator.red    	{ background: red; }
+.indicator.lightblue  	{ background: lightblue; }
 
 .whiteText   { color: white; }
 
@@ -79,6 +82,11 @@ body	{
 <div id="legendRed" class="indicator red whiteText">Failed</div>
 <button onclick='$("#content > .indicator").filter(".red").hide();'>Hide</button>
 <button onclick='$("#content > .indicator").filter(".red").show();'>Show</button>
+&nbsp
+&nbsp
+<div id="legendBlue" class="indicator lightblue whiteText">Kyndryl</div>
+<button onclick='$("#content > .indicator").filter(".lightblue").hide();'>Hide</button>
+<button onclick='$("#content > .indicator").filter(".lightblue").show();'>Show</button>
 &nbsp
 &nbsp
 <div id="legendGrey" class="indicator grey whiteText">Skipped</div>

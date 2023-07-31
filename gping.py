@@ -251,6 +251,10 @@ if __name__ == '__main__':
           print hostname[1:]+","+"Fault"+","+desc
           continue
 
+        if hostname[0] == '!':
+          print hostname[1:]+","+"Kyndryl"+","+desc
+          continue
+
         hostname, desc = target.rstrip().split(',', 1)
         #sys.stderr.write(hostname + "\n")
         gp.send(hostname,desc, test_callback)
