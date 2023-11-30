@@ -41,8 +41,6 @@ sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink), '!' non
   /^10\.10\.100\.129/		s/^/-/; t;	# firewall logs
   /^10\.111\./			s/^/-/; t;	# survivor
   /^10\.123\./			s/^/-/; t;	# survivor
-  /^10\.138\./			s/^/-/; t;	# SYD01 management VMs
-  /^10\.63\./			s/^/-/; t;	# SYD04 management VMs
   /^169\./			s/^/-/; t;	# Network appliance VMs
   /^172\./			s/^/-/; t; 	# Private addresses
   /^192\./			s/^/-/; t; 	# Private addresses
