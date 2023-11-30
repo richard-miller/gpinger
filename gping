@@ -68,6 +68,7 @@ sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink), '!' non
 ' |
 sed 's/.mqauth.uni.mq.edu.au//' |
 sed 's/vcenter.sddc-54-253-2-26.vmwarevmc.com/vmc - sddc1/' |
+sed 's/pam06itvctr001/campus-cluster/' |
 python gping.py |
 sort -n |
 awk -F, '
