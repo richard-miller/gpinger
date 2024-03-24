@@ -29,6 +29,8 @@ source ~bogo/conda-setup.sh
 conda activate gping
 cat vmware-addresses |			        # from PowerCLI (sitea, syd01, syd04, vmc)`
 sed '						# '-' prefix for skipped (grey), '+' prefix for fault (pink), '!' non-pingable (blue)
+  /stmmgtprod3002/		s/^/!/; t;	# windows f/w blocking ping
+  /sccmpwbi1001a/		s/^/!/; t;	# windows f/w blocking ping
   /^10\.20\.248\./		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
   /^10\.20\.250\./		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
   /^10\.42\.0\.0/		s/^/!/; t;	# Kyndryl Applicances - not pingable from outside PA VPN connection
