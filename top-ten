@@ -1,0 +1,15 @@
+cd /bogo/gping/www/history
+(
+echo "<h2>gping - Top Ten - Failed Ping Counts</h2>"
+echo "<ul>"
+echo "<h3>Count, Heatmap</h3>" 
+for i in *; do 
+  echo \
+    $(grep "indicator red" $i/include.html | wc -l) \
+    "<a href=\"/gping/history/$i\">$i</a><br>"; 
+done | 
+sort -rn |
+head
+echo "</ul>"
+echo "<br><br>Last update: $(date)" \
+) > top-ten/index.html
