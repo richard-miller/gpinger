@@ -3,5 +3,5 @@
 * * * * *               sleep 20; /bogo/gping/gping > /dev/null 2>&1
 * * * * *               sleep 40; /bogo/gping/gping > /dev/null 2>&1
 #*/5 * * * *            /bogo/gping/red-alert > /dev/null 2>&1
-* * * * *               /bogo/gping/www/history/snap > /dev/null 2>&1
-*/1 * * * *             /bogo/gping/top-ten > /dev/null 2>&1
+* * * * *               /bogo/gping/history-snap > /dev/null 2>&1
+*/10 * * * *            /bogo/gping/top-ten > /dev/null 2>&1
