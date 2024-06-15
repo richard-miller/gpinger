@@ -1,14 +1,15 @@
 cd /bogo/gping/www/history
 
-find * -type d -daystart -mtime +30 ! -path "top-ten" -exec rm {} \;
+find . -maxdepth 1 -type d -daystart -mtime +30 ! -path "*/top-ten" -exec rm -rf {} \;
 
 (
 echo "<h2>gping - Top Ten - Failed Ping Counts</h2>"
 echo "<ul>"
 echo "<h3>Count, Heatmap</h3>" 
 
+#echo "TODAY" 1>&2
 echo "<h4>Today</h4>"
-for i in $(find * -type d -daystart -mtime -1 ! -path "top-ten"); do 
+for i in $(find . -mindepth 1 -type d -daystart -mtime -1 ! -path "*/top-ten"); do 
   echo \
     $(grep "indicator red" $i/include.html | wc -l) \
     "<a href=\"/gping/history/$i\">$i</a><br>"
@@ -16,8 +17,9 @@ done |
 sort -rn |
 head | sort -k2 -r
 
+#echo "YESTERDAY" 1>&2
 echo "<h4>Yesterday</h4>"
-for i in $(find * -type d -daystart -mtime -2 -mtime +0 ! -path "top-ten"); do
+for i in $(find . -mindepth 1 -type d -daystart -mtime -2 -mtime +0 ! -path "*/top-ten"); do
   echo \
     $(grep "indicator red" $i/include.html | wc -l) \
     "<a href=\"/gping/history/$i\">$i</a><br>"
@@ -25,8 +27,19 @@ done |
 sort -rn |
 head | sort -k2 -r
 
+#echo "LAST 7 DAYS" 1>&2
 echo "<h4>Last 7 days (excluding today and yesterday)</h4>"
-for i in $(find * -type d -daystart -mtime -7 -mtime +1 ! -path "top-ten"); do
+for i in $(find . -mindepth 1 -type d -daystart -mtime -7 -mtime +1 ! -path "*/top-ten"); do
+  echo \
+    $(grep "indicator red" $i/include.html | wc -l) \
+    "<a href=\"/gping/history/$i\">$i</a><br>"
+done |
+sort -rn |
+head | sort -k2 -r
+
+#echo "LAST 30 DAYS" 1>&2
+echo "<h4>Last 30 days (excluding last 7 days)</h4>"
+for i in $(find . -mindepth 1 -type d -daystart -mtime -30 -mtime +6 ! -path "*/top-ten"); do
   echo \
     $(grep "indicator red" $i/include.html | wc -l) \
     "<a href=\"/gping/history/$i\">$i</a><br>"
