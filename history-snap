@@ -1,4 +1,4 @@
 cd /bogo/gping/www/history; 
-now=`date +%Y%m%d-%T`
-mkdir $now; 
+now=`date +%Y%m%d/%T`
+mkdir -p $now; 
 cp ../index.html ../include.html $now
